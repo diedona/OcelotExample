@@ -59,6 +59,19 @@ namespace APIProduct
                 };
             });
 
+            services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy("UserMustBeAbleToTalk", pb =>
+                {
+                    pb.RequireAuthenticatedUser();
+                    pb.RequireClaim("Actions");
+                    pb.RequireAssertion(context =>
+                    {
+                        return context.User.FindFirst("Actions").Value.Contains("talk", StringComparison.InvariantCultureIgnoreCase);
+                    });
+                });
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "APIProduct", Version = "v1" });

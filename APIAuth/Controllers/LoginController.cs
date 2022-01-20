@@ -18,7 +18,8 @@ namespace APIAuth.Controllers
         private readonly Dictionary<string, string> _Users = new Dictionary<string, string>()
         {
             ["admin"] = "123",
-            ["joao"] = "321"
+            ["joao"] = "321",
+            ["diego"] = "111"
         };
 
         private readonly JWTSettings _Settings;
@@ -36,7 +37,7 @@ namespace APIAuth.Controllers
                 return BadRequest("auth failed");
 
             string password = _Users[request.Username];
-            if(!string.Equals(password, request.Password))
+            if (!string.Equals(password, request.Password))
                 return BadRequest("auth failed");
 
             return Ok(GenerateToken(request));
@@ -53,7 +54,8 @@ namespace APIAuth.Controllers
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, request.Username),
-                    new Claim(ClaimTypes.Role, GetRole(request.Username))
+                    new Claim(ClaimTypes.Role, GetRole(request.Username)),
+                    new Claim("Actions", GetActions(request.Username))
                 }),
                 Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -62,9 +64,19 @@ namespace APIAuth.Controllers
             return tokenHandler.WriteToken(token);
         }
 
+        private string GetActions(string username)
+        {
+            if (username.Equals("admin"))
+                return "run,walk,talk";
+            else if (username.Equals("joao"))
+                return "run,talk";
+
+            return "run";
+        }
+
         private string GetRole(string username)
         {
-            if(string.Equals(username, "admin"))
+            if (string.Equals(username, "admin") || string.Equals(username, "diego"))
                 return "admin";
 
             return "guest";

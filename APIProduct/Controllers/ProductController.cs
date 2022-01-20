@@ -22,5 +22,13 @@ namespace APIProduct.Controllers
         {
             return Ok("CHOCOLATE");
         }
+
+        [HttpGet]
+        [Authorize(Policy = "UserMustBeAbleToTalk")]
+        [Route("talk")]
+        public ActionResult<string> GetTalk()
+        {
+            return Ok("yes you can talk");
+        }
     }
 }
