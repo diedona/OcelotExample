@@ -14,5 +14,13 @@ namespace APIProduct.Controllers
         {
             return Ok(new[] { "Apple", "Orange", "Milk" });
         }
+
+        [HttpGet]
+        [Authorize(Roles = "admin")]
+        [Route("secret")]
+        public ActionResult<string> GetSecretProduct()
+        {
+            return Ok("CHOCOLATE");
+        }
     }
 }

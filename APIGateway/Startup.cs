@@ -1,3 +1,4 @@
+using APIGateway.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace APIGateway
@@ -35,15 +37,31 @@ namespace APIGateway
             services.AddControllers();
             services.AddOcelot(Configuration);
 
+            var settings = new JWTSettings();
+            Configuration.GetSection("Jwt").Bind(settings);
+            services.AddSingleton(settings);
+
+            var key = Encoding.UTF8.GetBytes(settings.Key);
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(x =>
             {
-                x.RequireHttpsMetadata = false;
+                x.RequireHttpsMetadata = true;
                 x.SaveToken = true;
-                x.TokenValidationParameters = TokenValidation();
+                x.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = settings.Issuer,
+                    ValidAudience = settings.Audience,
+                    ClockSkew = TimeSpan.Zero,
+                };
             });
 
             services.AddSwaggerGen(c =>
@@ -52,13 +70,13 @@ namespace APIGateway
             });
         }
 
-        private TokenValidationParameters TokenValidation()
+        private TokenValidationParameters GenerateTokenValidationParameters()
         {
             var result = new TokenValidationParameters()
             {
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ValidateIssuerSigningKey = false,
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateIssuerSigningKey = true,
                 SignatureValidator = delegate (string token, TokenValidationParameters validationParameters)
                 {
                     var jwt = new JwtSecurityToken(token);
