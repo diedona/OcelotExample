@@ -1,3 +1,4 @@
+using APIProduct.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,8 +33,11 @@ namespace APIProduct
 
             services.AddControllers();
 
-            //var key = Encoding.UTF8.GetBytes(HardcodedConfigurations.WrongKey); // <<< will result in not authorized!!!
-            var key = Encoding.UTF8.GetBytes(HardcodedConfigurations.Key); // <<< will result in not authorized!!!
+            var settings = new JWTSettings();
+            Configuration.GetSection("Jwt").Bind(settings);
+            services.AddSingleton(settings);
+
+            var key = Encoding.UTF8.GetBytes(settings.Key); // <<< will result in not authorized!!!
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -47,7 +51,11 @@ namespace APIProduct
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = true,
-                    ValidateAudience = true
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = settings.Issuer,
+                    ValidAudience = settings.Audience,
+                    ClockSkew = TimeSpan.Zero,
                 };
             });
 

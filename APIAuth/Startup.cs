@@ -56,6 +56,7 @@ namespace APIAuth
                     ValidateLifetime = true,
                     ValidIssuer = settings.Issuer,
                     ValidAudience = settings.Audience,
+                    ClockSkew = TimeSpan.Zero,
                 };
             });
 
