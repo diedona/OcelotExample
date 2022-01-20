@@ -21,6 +21,10 @@
           "Port": 6001
         }
       ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
       "UpstreamPathTemplate": "/product{everything}"
       //"DangerousAcceptAnyServerCertificateValidator": true
     }

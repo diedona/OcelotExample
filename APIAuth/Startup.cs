@@ -1,3 +1,4 @@
+using APIAuth.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,7 +33,12 @@ namespace APIAuth
 
             services.AddControllers();
 
-            var key = Encoding.UTF8.GetBytes(HardcodedConfigurations.Key);
+            var settings = new JWTSettings();
+            Configuration.GetSection("Jwt").Bind(settings);
+            services.AddSingleton(settings);
+
+            var key = Encoding.UTF8.GetBytes(settings.Key);
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -46,7 +52,10 @@ namespace APIAuth
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = true,
-                    ValidateAudience = true
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = settings.Issuer,
+                    ValidAudience = settings.Audience,
                 };
             });
 

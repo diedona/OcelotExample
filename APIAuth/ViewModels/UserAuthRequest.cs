@@ -1,4 +1,4 @@
-﻿namespace APIAuth.ViewModel
+﻿namespace APIAuth.ViewModels
 {
     public class UserAuthRequest
     {

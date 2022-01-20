@@ -1,5 +1,5 @@
-﻿using APIAuth.ViewModel;
-using Microsoft.AspNetCore.Http;
+﻿using APIAuth.Models;
+using APIAuth.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -21,6 +21,13 @@ namespace APIAuth.Controllers
             ["joao"] = "321"
         };
 
+        private readonly JWTSettings _Settings;
+
+        public LoginController(JWTSettings settings)
+        {
+            _Settings = settings;
+        }
+
         [HttpPost]
         [Route("authenticate")]
         public async Task<ActionResult> Authenticate([FromBody] UserAuthRequest request)
@@ -38,9 +45,11 @@ namespace APIAuth.Controllers
         private string GenerateToken(UserAuthRequest request)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(HardcodedConfigurations.Key);
+            var key = Encoding.UTF8.GetBytes(_Settings.Key);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
+                Issuer = _Settings.Issuer,
+                Audience = _Settings.Audience,
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, request.Username),
