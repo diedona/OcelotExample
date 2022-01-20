@@ -70,27 +70,6 @@ namespace APIGateway
             });
         }
 
-        private TokenValidationParameters GenerateTokenValidationParameters()
-        {
-            var result = new TokenValidationParameters()
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateIssuerSigningKey = true,
-                SignatureValidator = delegate (string token, TokenValidationParameters validationParameters)
-                {
-                    var jwt = new JwtSecurityToken(token);
-                    return jwt;
-                },
-                RequireExpirationTime = true,
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
-            };
-
-            result.RequireAudience = false;
-            return result;
-        }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
