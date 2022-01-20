@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIProduct", "APIProduct\AP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIGateway", "APIGateway\APIGateway.csproj", "{2841F822-5338-4542-88C6-776B2BBE8F28}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIAuth", "APIAuth\APIAuth.csproj", "{935DBC01-4ADE-4274-9C5B-ACA52373594C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2841F822-5338-4542-88C6-776B2BBE8F28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2841F822-5338-4542-88C6-776B2BBE8F28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2841F822-5338-4542-88C6-776B2BBE8F28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{935DBC01-4ADE-4274-9C5B-ACA52373594C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{935DBC01-4ADE-4274-9C5B-ACA52373594C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{935DBC01-4ADE-4274-9C5B-ACA52373594C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{935DBC01-4ADE-4274-9C5B-ACA52373594C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
