@@ -1,6 +1,18 @@
 ﻿{
   "Routes": [
     {
+      "DownstreamPathTemplate": "/api/login/authenticate",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ],
+      "UpstreamPathTemplate": "/authenticate"
+      //"DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
       "DownstreamPathTemplate": "/api/product{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
